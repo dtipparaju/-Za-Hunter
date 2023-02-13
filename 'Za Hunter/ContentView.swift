@@ -21,7 +21,9 @@ struct ContentView: View {
                 showsUserLocation: true,
                 userTrackingMode: $userTrackingMode,
                 annotationItems: places) { places in
-                    MapMarker(coordinate: places.annotation.coordinate)
+                    MapAnnotation(coordinate: places.annotation.coordinate) {
+                        Marker(mapItem: places.mapItem)
+                    }
                 }
                 .onAppear(perform: {
                     performSerach(item: "Pizza")
@@ -57,4 +59,15 @@ struct Place: Identifiable {
     let id = UUID()
     let annotation: MKPointAnnotation
     let mapItem: MKMapItem
+}
+
+struct Marker: View{
+    var mapItem: MKMapItem
+    var body: some View{
+        if let url = mapItem.url{
+            Link(destination: url, label: {
+                Image("pizza")
+            })
+        }
+    }
 }
